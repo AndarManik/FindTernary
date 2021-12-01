@@ -15,30 +15,22 @@ public class TernOpMethods {
         return error;
     }
 
-    public void score(BiasManager nn)
+    public DoubleArrayList getScoreList(BiasManager nn)
     {
-        double totalError = 0;
-        double maxError = 0;
-        ArrayList<Double> l = new ArrayList<>();
+        DoubleArrayList scoreList = new DoubleArrayList();
         for(int epoc = 0; epoc < Math.pow(3, 9); epoc++)
         {
             int index = epoc;
-
             nn.setBias(index);
-
             double[] currentOp = outputSpace.get(index);
-
             double error = 0;
-
             for(int i = 0; i < currentOp.length; i++)
                 error += nn.backProp(inputSpace.get(i), new double[] {currentOp[i]});
-
-            System.out.println(index + " " + error);
-            maxError = Math.max(error, maxError);
-            totalError += error;
+            scoreList.add(new double[] {index, error});
         }
-        System.out.println(1.0 * totalError/Math.pow(3,9) + " " + maxError);
+        return scoreList;
     }
+
 
     public void randomTrain(BiasManager nn, int epocMag, double rate) {
         for (int epoc = 0; epoc < Math.pow(10, epocMag); epoc++) {
