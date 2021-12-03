@@ -26,10 +26,8 @@ public class DoubleArrayList
         for(double[] arr : list)
             for(int i = 0; i < arr.length; i++)
                 average[i] += arr[i];
-
         for(int i = 0; i < average.length; i++)
             average[i] /= list.size();
-
         return average;
     }
 
@@ -40,7 +38,6 @@ public class DoubleArrayList
             for(int i = 0; i < arr.length; i++)
                 if(arr[i] > max[i])
                     max[i] = arr[i];
-
         return max;
     }
 

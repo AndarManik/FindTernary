@@ -5,7 +5,7 @@ import java.io.*;
 public class NeuralNetwork
 {
     ArrayList<Node[]> network = new ArrayList<>();
-    Functions f = new ReLuTanh();
+    Functions f = new TanhTanh();
 
     /**
      * Construct Neural Network
@@ -112,7 +112,7 @@ public class NeuralNetwork
         for(int layer = 1; layer < network.size(); layer++)
             for(Node node: network.get(layer))
                 for (int i = 0; i < node.weight.length; i++)//update weights by negative gradient
-                    node.weight[i] += node.grad[i] * -rate;
+                    node.weight[i] -= node.grad[i] * rate;
         clear();
     }
 
@@ -293,6 +293,36 @@ public class NeuralNetwork
         public double derOut(double preAct, double val, double exp)
         {
             return (val - exp) *  (1 - val) * val;
+        }
+
+        public double error(double[] output, double[] expected)
+        {
+            double error = 0;
+            for(int i = 0; i < output.length; i++)
+                error += 0.5 * Math.pow(output[i] - expected[i], 2);
+            return error;
+        }
+    }
+
+    public static class TanhTanh implements Functions {
+        public double activate(double input) {
+            return Math.tanh(input);
+        }
+
+        public double der(double input, double output) {
+            return (1 - output * output);
+        }
+
+        public double[] activateOut(double[] input) {
+            double[] ret = new double[input.length];
+            for (int i = 0; i < ret.length; i++)
+                ret[i] = Math.tanh(input[i]);
+            return ret;
+        }
+
+        public double derOut(double preAct, double val, double exp)
+        {
+            return (val - exp) *  (1 - val * val);
         }
 
         public double error(double[] output, double[] expected)

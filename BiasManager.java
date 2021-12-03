@@ -64,15 +64,28 @@ public class BiasManager {
     }
 
     public void updateBias(double rate) {
-        int biasIndex = 0;
         for(int i = 1; i < nn.network.size() - 1; i++)
-            for(NeuralNetwork.Node n : nn.network.get(i)) {
+            for(NeuralNetwork.Node n : nn.network.get(i))
                 n.weight[n.weight.length -1] -= n.grad[n.grad.length - 1] * rate;
-                n.grad[n.grad.length - 1] = 0;
-            }
+        clear();
     }
 
     public void update(double rate) {
         nn.update(rate);
+    }
+
+    public void clear()
+    {
+        nn.clear();
+    }
+
+    public double[] getBiasPOINTER(int index) {
+        return biases.get(index);
+    }
+
+    public void randomizeBias(int index) {
+        double[] curr = biases.get(index);
+        for(int i = 0; i < curr.length; i++)
+            curr[i] = Math.random() - 0.5;
     }
 }
